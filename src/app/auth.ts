@@ -2,13 +2,16 @@ import { sendEmail } from "@/actions/send-email";
 import prisma from "@/lib/prisma";
 import { betterAuth, BetterAuthOptions } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { openAPI } from "better-auth/plugins";
+import { admin, openAPI } from "better-auth/plugins";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "mongodb",
   }),
-  plugins: [openAPI()], // api/auth/reference
+  plugins: [
+    openAPI(),
+    admin({ impersonationSessionDuration: 60 * 60 * 24 * 7 }), // 7 days
+  ],
   emailAndPassword: {
     enabled: true,
     autoSignIn: true,
@@ -55,6 +58,14 @@ export const auth = betterAuth({
         verificationUrl,
       });
       console.log("result:", JSON.stringify(result));
+    },
+  },
+  session: {
+    expiresIn: 60 * 60 * 24 * 7,
+    updateAge: 60 * 60 * 24,
+    cookieCache: {
+      enabled: true,
+      maxAge: 5 * 60, // Cache duration in seconds
     },
   },
 } satisfies BetterAuthOptions);
