@@ -1,7 +1,7 @@
 "use server";
 import sgMail from "@sendgrid/mail";
 
-export async function sendEmail({
+export async function sendEmailzz({
   to,
   subject,
   text,
