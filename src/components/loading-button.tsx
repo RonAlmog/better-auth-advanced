@@ -5,7 +5,7 @@ import { Loader } from "lucide-react";
 type Props = {
   pending: boolean;
   children: React.ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
 };
 
 const LoadingButton = ({ pending, children, onClick }: Props) => {
