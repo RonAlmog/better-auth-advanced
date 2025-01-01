@@ -41,8 +41,8 @@ const SignUp = () => {
 
   async function onSubmit(values: z.infer<typeof signUpSchema>) {
     const { name, email, password } = values;
-    console.log({ name, email, password });
-    const { data, error } = await authClient.signUp.email(
+
+    await authClient.signUp.email(
       {
         email,
         password,

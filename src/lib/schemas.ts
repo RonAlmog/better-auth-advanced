@@ -27,3 +27,23 @@ export const signInSchema = z.object({
     .min(1, { message: "Password is required" })
     .max(50, { message: "Password cannot exceed 50 chararcters long" }),
 });
+
+export const forgotPasswordSchema = z.object({
+  email: z.string().email({ message: "Please enter a valid email" }),
+});
+
+export const resetPasswordSchema = z
+  .object({
+    password: z
+      .string()
+      .min(8, { message: "Password must be at least 8 chars long" })
+      .max(50, { message: "Password cannot exceed 50 chararcters long" }),
+    confirmPassword: z
+      .string()
+      .min(8, { message: "Password must be at least 8 chars long" })
+      .max(50, { message: "Password cannot exceed 50 chararcters long" }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
