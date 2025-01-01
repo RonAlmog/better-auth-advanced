@@ -1,9 +1,10 @@
-import { sendEmail } from "@/actions/send-email";
+import { sendEmail, sendResetPasswordEmail } from "@/actions/send-email";
 import prisma from "@/lib/prisma";
 import { betterAuth, BetterAuthOptions } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { openAPI } from "better-auth/plugins";
 import { nextCookies } from "better-auth/next-js";
+import { url } from "inspector";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -25,6 +26,15 @@ export const auth = betterAuth({
     enabled: true,
     autoSignIn: true,
     requireEmailVerification: true,
+    sendResetPassword: async ({ user, url }) => {
+      // send email with action
+      const result = await sendResetPasswordEmail({
+        from: process.env.FROM_EMAIL!,
+        to: user.email,
+        url,
+      });
+      console.log("result:", JSON.stringify(result));
+    },
   },
   emailVerification: {
     sendOnSignUp: true,
