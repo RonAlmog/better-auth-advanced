@@ -2,15 +2,22 @@ import { sendEmail } from "@/actions/send-email";
 import prisma from "@/lib/prisma";
 import { betterAuth, BetterAuthOptions } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-// import { admin, openAPI } from "better-auth/plugins";
+import { openAPI } from "better-auth/plugins";
 import { nextCookies } from "better-auth/next-js";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "mongodb",
   }),
+  socialProviders: {
+    github: {
+      enabled: true,
+      clientId: process.env.GITHUB_CLIENT_ID!,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+    },
+  },
   plugins: [
-    // openAPI(),
+    openAPI(),
     // admin({ impersonationSessionDuration: 60 * 60 * 24 * 7 }), // 7 days
     nextCookies(), // make sure this is the last one
   ],

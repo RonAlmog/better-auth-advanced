@@ -11,7 +11,6 @@ import Link from "next/link";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -29,9 +28,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ErrorContext } from "@better-fetch/fetch";
 import LoadingButton from "@/components/loading-button";
+import { GithubIcon } from "lucide-react";
 
 const SignIn = () => {
   const [pending, setPending] = useState(false);
+  const [pendingGitHub, setPendingGitHub] = useState(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
@@ -47,7 +48,7 @@ const SignIn = () => {
       {
         email,
         password,
-        callbackURL: "/dashboard",
+        // callbackURL: "/dashboard",
       },
       {
         onRequest: () => {
@@ -81,6 +82,30 @@ const SignIn = () => {
       }
     );
   }
+
+  const handleGitHubSignIn = async () => {
+    await authClient.signIn.social(
+      { provider: "github" },
+      {
+        onRequest: () => {
+          setPendingGitHub(true);
+        },
+        onSuccess: () => {
+          setPendingGitHub(false);
+          router.push("/");
+          router.refresh();
+        },
+        onError: (ctx: ErrorContext) => {
+          toast({
+            title: "Something went wrong",
+            description: ctx.error.message ?? "We could not sign you in",
+            variant: "destructive",
+          });
+          setPendingGitHub(false);
+        },
+      }
+    );
+  };
 
   return (
     <Card className="w-full max-w-md mx-auto">
@@ -126,6 +151,12 @@ const SignIn = () => {
             <LoadingButton pending={pending}>Submit</LoadingButton>
           </form>
         </Form>
+        <div className="mt-4">
+          <LoadingButton pending={pendingGitHub} onClick={handleGitHubSignIn}>
+            <GithubIcon className=" size-4 mr-2" />
+            Sign in with GitHub
+          </LoadingButton>
+        </div>
       </CardContent>
       <CardFooter className="flex justify-center">
         <p className="text-sm text-muted-foreground">
