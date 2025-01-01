@@ -24,6 +24,6 @@ export async function POST(req: Request) {
   }
 }
 
-// export async function GET(req: Request) {
-//   return Response.json({ message: "Hello World!" });
-// }
+export async function GET(req: Request) {
+  return Response.json({ message: "Hello World!" });
+}

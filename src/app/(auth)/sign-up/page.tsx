@@ -25,9 +25,11 @@ import { Input } from "@/components/ui/input";
 import { signUpSchema } from "@/lib/schemas";
 import { authClient } from "@/app/auth-client";
 import { toast } from "@/hooks/use-toast";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
+import { ErrorContext } from "@better-fetch/fetch";
 
 const SignUp = () => {
+  const router = useRouter();
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -39,7 +41,8 @@ const SignUp = () => {
 
   async function onSubmit(values: z.infer<typeof signUpSchema>) {
     const { name, email, password } = values;
-    await authClient.signUp.email(
+    console.log({ name, email, password });
+    const { data, error } = await authClient.signUp.email(
       {
         email,
         password,
@@ -56,12 +59,15 @@ const SignUp = () => {
           form.reset();
           toast({ title: "Logged in!", variant: "default" });
           redirect("/");
+          router.refresh();
         },
-        onError: (ctx) => {
-          toast({ title: ctx.error.message, variant: "destructive" });
-          form.setError("email", {
-            type: "manual",
-            message: ctx.error.message,
+        onError: (ctx: ErrorContext) => {
+          console.log(JSON.stringify(ctx.error));
+
+          toast({
+            title: "Something went wrong",
+            description: ctx.error.message ?? "We could not sign you up",
+            variant: "destructive",
           });
         },
       }
