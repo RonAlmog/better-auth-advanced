@@ -2,7 +2,7 @@ import { sendEmail } from "@/actions/send-email";
 import prisma from "@/lib/prisma";
 import { betterAuth, BetterAuthOptions } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { admin, openAPI } from "better-auth/plugins";
+// import { admin, openAPI } from "better-auth/plugins";
 import { nextCookies } from "better-auth/next-js";
 
 export const auth = betterAuth({
@@ -17,23 +17,23 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     autoSignIn: true,
-    // requireEmailVerification: true,
+    requireEmailVerification: true,
   },
-  // emailVerification: {
-  //   sendOnSignUp: true,
-  //   autoSignInAfterVerification: true,
-  //   sendVerificationEmail: async ({ user, token }) => {
-  //     const verificationUrl = `${process.env.NEXT_PUBLIC_BETTER_AUTH_URL}/api/auth/verify-email?token=${token}&callbackUrl=${process.env.EMAIL_VERIFICATION_CALLBACK_URL}`;
+  emailVerification: {
+    sendOnSignUp: true,
+    autoSignInAfterVerification: true,
+    sendVerificationEmail: async ({ user, token }) => {
+      const verificationUrl = `${process.env.NEXT_PUBLIC_URL}/api/auth/verify-email?token=${token}&callbackURL=${process.env.EMAIL_VERIFICATION_CALLBACK_URL}`;
 
-  //     // send email with action
-  //     const result = await sendEmail({
-  //       from: process.env.FROM_EMAIL!,
-  //       to: user.email,
-  //       verificationUrl,
-  //     });
-  //     console.log("result:", JSON.stringify(result));
-  //   },
-  // },
+      // send email with action
+      const result = await sendEmail({
+        from: process.env.FROM_EMAIL!,
+        to: user.email,
+        verificationUrl,
+      });
+      console.log("result:", JSON.stringify(result));
+    },
+  },
   session: {
     expiresIn: 60 * 60 * 24 * 7,
     updateAge: 60 * 60 * 24,

@@ -60,12 +60,22 @@ const SignIn = () => {
           router.refresh();
         },
         onError: (ctx: ErrorContext) => {
-          toast({
-            title: "Something went wrong",
-            description:
-              ctx.error.message ?? "We could not find your credentials",
-            variant: "destructive",
-          });
+          // Handle not verified error
+          if (ctx.error.status === 403) {
+            toast({
+              title: "Email not verified",
+              description: "Please verify your email address",
+              variant: "destructive",
+            });
+          } else {
+            // handle generic error
+            toast({
+              title: "Something went wrong",
+              description:
+                ctx.error.message ?? "We could not find your credentials",
+              variant: "destructive",
+            });
+          }
           setPending(false);
         },
       }
