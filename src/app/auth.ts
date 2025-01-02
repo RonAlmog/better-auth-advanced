@@ -2,14 +2,22 @@ import { sendEmail, sendResetPasswordEmail } from "@/actions/send-email";
 import prisma from "@/lib/prisma";
 import { betterAuth, BetterAuthOptions } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { openAPI } from "better-auth/plugins";
+import { openAPI, admin } from "better-auth/plugins";
 import { nextCookies } from "better-auth/next-js";
-import { url } from "inspector";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "mongodb",
   }),
+  // add custom fields to the user object
+  user: {
+    additionalFields: {
+      premium: {
+        type: "boolean",
+        required: false,
+      },
+    },
+  },
   socialProviders: {
     github: {
       enabled: true,
@@ -19,7 +27,7 @@ export const auth = betterAuth({
   },
   plugins: [
     openAPI(),
-    // admin({ impersonationSessionDuration: 60 * 60 * 24 * 7 }), // 7 days
+    admin({ impersonationSessionDuration: 60 * 60 * 24 * 7 }), // 7 days
     nextCookies(), // make sure this is the last one
   ],
   emailAndPassword: {
@@ -60,7 +68,7 @@ export const auth = betterAuth({
     },
   },
   rateLimit: {
-    window: 10, // time window in seconds
+    window: 60, // time window in seconds
     max: 100, // max requests in the window
   },
 } satisfies BetterAuthOptions);
