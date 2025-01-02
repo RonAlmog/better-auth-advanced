@@ -4,13 +4,13 @@ import { NextResponse, type NextRequest } from "next/server";
 
 const authRoutes = ["/sign-in", "/sign-up"];
 const passwordRoutes = ["/forgot-password", "/reset-password"];
-// const adminRoutes = ["/admin"];
+const adminRoutes = ["/admin"];
 
 export default async function authMiddleware(req: NextRequest) {
   const pathName = req.nextUrl.pathname;
   const isAuthRoute = authRoutes.includes(pathName);
   const isPasswordRoute = passwordRoutes.includes(pathName);
-  // const isAdminRoute = adminRoutes.includes(pathName);
+  const isAdminRoute = adminRoutes.includes(pathName);
 
   const { data: session } = await betterFetch<Session>(
     "/api/auth/get-session",
@@ -32,8 +32,13 @@ export default async function authMiddleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/sign-in", req.url));
   }
 
-  // user is logged in
+  // user is logged in. no access to sign-in, sign-up, forgot-password, reset-password
   if (isAuthRoute || isPasswordRoute) {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
+
+  // block admin routes for non-admin users
+  if (isAdminRoute && session.user.role !== "admin") {
     return NextResponse.redirect(new URL("/", req.url));
   }
 
