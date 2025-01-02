@@ -23,7 +23,3 @@ export async function POST(req: Request) {
     return Response.json({ error }, { status: 500 });
   }
 }
-
-export async function GET(req: Request) {
-  return Response.json({ message: "Hello World!" });
-}
