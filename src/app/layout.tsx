@@ -28,14 +28,14 @@ export default async function RootLayout({
 }>) {
   // getSession can only be called server-side, because it needs to be awaited.
   // so we load it here, and pass it down to the Navbar component.
-  const session = await auth.api.getSession({ headers: await headers() });
-  console.log({ session });
+  // const session = await auth.api.getSession({ headers: await headers() });
+  // console.log({ session });
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Navbar session={session} />
+        <Navbar />
         <div className="flex flex-col min-h-screen pt-10">{children}</div>
         <Toaster />
       </body>
