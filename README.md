@@ -1,6 +1,26 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Better Auth Advanced!
 
-## Getting Started
+This is a Next.js project to demonstrate and play with some of the neat features of BetterAuth.
+
+#### Some of the features demonstrated here
+
+sign up, sign in pages.
+sign out.
+use of session
+error handling with feedback to users
+rate limiting (throttling)
+forgot password
+password reset
+Oauth authentication
+account linking (email/password and social login)
+middleware
+protected admin section
+user management
+user roles
+users access control
+user impersonation (!)
+server side auth
+client side auth
 
 First, run the development server:
 
