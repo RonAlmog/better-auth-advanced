@@ -17,7 +17,7 @@ middleware
 protected admin section
 user management
 user roles
-users access control
+users access control (RBAC)
 user impersonation (!)
 server side auth
 client side auth
