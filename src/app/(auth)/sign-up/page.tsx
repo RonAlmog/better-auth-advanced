@@ -21,12 +21,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { InputPlus } from "@/components/button-plus";
 import { signUpSchema } from "@/lib/schemas";
 import { authClient } from "@/app/auth-client";
 import { toast } from "@/hooks/use-toast";
 import { redirect, useRouter } from "next/navigation";
 import { ErrorContext } from "@better-fetch/fetch";
+import { KeyRound, MailIcon, UserIcon } from "lucide-react";
 
 const SignUp = () => {
   const router = useRouter();
@@ -90,7 +91,11 @@ const SignUp = () => {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="John doe" {...field} />
+                    <InputPlus
+                      placeholder="John doe"
+                      {...field}
+                      Icon={UserIcon}
+                    />
                   </FormControl>
                   <FormDescription>
                     This is your public display name.
@@ -106,7 +111,11 @@ const SignUp = () => {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="Your email" {...field} />
+                    <InputPlus
+                      placeholder="Your email"
+                      {...field}
+                      Icon={MailIcon}
+                    />
                   </FormControl>
                   <FormDescription>Enter your email address</FormDescription>
                   <FormMessage />
@@ -120,7 +129,12 @@ const SignUp = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="***" {...field} />
+                    <InputPlus
+                      type="password"
+                      placeholder="***"
+                      {...field}
+                      Icon={KeyRound}
+                    />
                   </FormControl>
                   <FormDescription>
                     Choose a password for your account

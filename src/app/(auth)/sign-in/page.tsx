@@ -20,7 +20,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { signInSchema } from "@/lib/schemas";
 import { authClient } from "@/app/auth-client";
 import { toast } from "@/hooks/use-toast";
@@ -28,7 +27,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ErrorContext } from "@better-fetch/fetch";
 import LoadingButton from "@/components/loading-button";
-import { GithubIcon } from "lucide-react";
+import { GithubIcon, MailIcon, KeyRound } from "lucide-react";
+import { InputPlus } from "@/components/button-plus";
 
 const SignIn = () => {
   const [pending, setPending] = useState(false);
@@ -125,7 +125,11 @@ const SignIn = () => {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="Your email" {...field} />
+                    <InputPlus
+                      placeholder="Your email"
+                      {...field}
+                      Icon={MailIcon}
+                    />
                   </FormControl>
                   <FormDescription>
                     Please enter your email address
@@ -141,7 +145,12 @@ const SignIn = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="***" {...field} />
+                    <InputPlus
+                      type="password"
+                      placeholder="***"
+                      {...field}
+                      Icon={KeyRound}
+                    />
                   </FormControl>
                   <FormDescription>Enter for your password</FormDescription>
                   <FormMessage />
